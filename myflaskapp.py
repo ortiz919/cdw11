@@ -6,11 +6,9 @@ import os
 # init.py 為自行建立的起始物件
 import init
 
-import users.a.g10.ag10_40323139
-import users.a.g4.ag4_40323138
-import users.a.g8.ag8_40323131_task1
-import users.b.g9.bg9_40323250
-import users.b.g11.bg11_40323245
+#g2
+import users.a.g2.task1.a40323111
+
 # 確定程式檔案所在目錄, 在 Windows 有最後的反斜線
 _curdir = os.path.join(os.getcwd(), os.path.dirname(__file__))
 # 設定在雲端與近端的資料儲存目錄
@@ -36,7 +34,6 @@ app = Flask(__name__)
 # In order to use sessions you have to set a secret key
 # set the secret key.  keep this really secret:
 app.secret_key = 'A0Zr9@8j/3yX R~XHH!jmN]LWX/,?R@T'
-
 
 
 
@@ -302,57 +299,6 @@ def fileuploadform():
   <input type="button" onclick="$('.prova').axuploader('enable')" value="ok" />
   </section></body></html>
   '''
-@app.route('/imageaxupload', methods=['POST'])
-# ajax jquery chunked file upload for flask
-def imageaxupload():
-    '''
-    if not session.get('logged_in'):
-        #abort(401)
-        return redirect(url_for('login'))
-    '''
-    # need to consider if the uploaded filename already existed.
-    # right now all existed files will be replaced with the new files
-    filename = request.args.get("ax-file-name")
-    flag = request.args.get("start")
-    if flag == "0":
-        file = open(data_dir+"images/"+filename, "wb")
-    else:
-        file = open(data_dir+"images/"+filename, "ab")
-    file.write(request.stream.read())
-    file.close()
-    return "image file uploaded!"
-
-    
-    
-@app.route('/imageuploadform')
-def imageuploadform():
-    '''
-    if not session.get('logged_in'):
-        #abort(401)
-        return redirect(url_for('login'))
-    '''
-    return "<h1>file upload</h1>"+'''
-  <script src="/static/jquery.js" type="text/javascript"></script>
-  <script src="/static/axuploader.js" type="text/javascript"></script>
-  <script>
-  $(document).ready(function(){
-  $('.prova').axuploader({url:'imageaxupload', allowExt:['jpg','png','gif','7z','pdf','zip','flv','stl','swf'],
-  finish:function(x,files)
-{
-    alert('All files have been uploaded: '+files);
-},
-  enable:true,
-  remotePath:function(){
-  return 'images/';
-  }
-  });
-  });
-  </script>
-  <div class="prova"></div>
-  <input type="button" onclick="$('.prova').axuploader('disable')" value="asd" />
-  <input type="button" onclick="$('.prova').axuploader('enable')" value="ok" />
-  </section></body></html>
-  '''
 @app.route('/downloads/<path:filename>', methods=['GET', 'POST'])
 def download(filename):
     #return send_from_directory(download_dir, filename=filename, as_attachment=True)
@@ -360,32 +306,13 @@ def download(filename):
     
 
 
-# setup static directory
-@app.route('/images/<path:path>')
-def send_images(path):
-    return send_from_directory(data_dir+"/images/", path)
-# setup static directory
-@app.route('/static/')
-def send_static():
-  return app.send_static_file('index.html')
+# 註冊各組的程式 (第3步/總共3步, 前面1步為 import ag1)
+# 以下依照班別與組別次序註冊藍圖
+# 二甲
 
-# setup static directory
-@app.route('/static/blog/')
-def send_blog():
-  return app.send_static_file('blog/index.html')
-
-# setup static directory
-@app.route('/static/<path:path>')
-def send_file(path):
-  return app.send_static_file(static_dir+path)
+#g2
+app.register_blueprint(users.a.g2.task1.a40323111.a40323111)
 
 if __name__ == "__main__":
     app.run()
-    
-app.register_blueprint(users.a.g10.ag10_40323139.ag10_40323139)
-app.register_blueprint(users.a.g8.ag8_40323131_task1.ag8_40323131)
-app.register_blueprint(users.a.g4.ag4_40323138.ag4_40323138)
-app.register_blueprint(users.b.g9.bg9_40323250.bg9_40323250)
-app.register_blueprint(users.b.g11.bg11_40323245.bg11_40323245)
-
 
